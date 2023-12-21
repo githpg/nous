@@ -1,4 +1,5 @@
 def right_turn(current_orient):
+    new_orient = ""
     if current_orient == "N":
         new_orient = "E"
     elif current_orient == "E":
@@ -12,6 +13,7 @@ def right_turn(current_orient):
 
 
 def left_turn(current_orient):
+    new_orient = ""
     if current_orient == "N":
         new_orient = "W"
     elif current_orient == "E":
@@ -73,17 +75,11 @@ def move_bot(
     death_coordinates,
 ):
     for move in bot_instructions:
-        print(
-            f"current positions: x = {bot_position_x} and  y = {bot_position_y} and orientation = {current_orient}"
-        )
         if move == "R":
-            print("turn right")
             current_orient = right_turn(current_orient)
         elif move == "L":
-            print("turn left")
             current_orient = left_turn(current_orient)
         elif move == "F":
-            print("move forward")
             bot_position_x, bot_position_y, bot_lost = move_forward(
                 current_orient,
                 bot_position_x,
@@ -97,8 +93,6 @@ def move_bot(
                     continue
 
                 elif (bot_position_x, bot_position_y) not in death_coordinates:
-                    print("bot lost")
-
                     new_death_coordinates = (bot_position_x, bot_position_y)
 
                     death_coordinates.append(new_death_coordinates)
@@ -122,10 +116,11 @@ def bot_info_input(bot_number, max_x, max_y, death_coordinates):
         start_position_x,
         start_position_y,
         start_position_orient,
-    ) = input().split()  # splits string into
+    ) = input().split()
 
     start_position_x = int(start_position_x)
     start_position_y = int(start_position_y)
+    start_position_orient = start_position_orient.upper()
 
     if (
         start_position_x > max_x
@@ -138,7 +133,7 @@ def bot_info_input(bot_number, max_x, max_y, death_coordinates):
         bot_lost = False
 
     print("what are your instructions?")
-    bot_instructions = input().strip()  # removes leading + trailing white space
+    bot_instructions = input().strip()
 
     current_orient = start_position_orient
     bot_position_x = int(start_position_x)
@@ -163,10 +158,8 @@ def bot_info_input(bot_number, max_x, max_y, death_coordinates):
 
 def main():
     death_coordinates = []
-    print("Enter the size of your planet")
+    print("Enter the size of your mars map")
     max_x, max_y = map(int, input().split())
-
-    print(max_x, max_y)
 
     bot_number = 1
 
