@@ -1,4 +1,50 @@
-def move_bot(bot_instructions):
+def oreientation():
+    N = bot_position_y + 1
+    S = bot_position_y - 1
+    E = bot_position_x + 1
+    W = bot_position_x - 1
+
+
+def left_turn(current_orient):
+    if current_orient is "N":
+        new_orient = "W"
+    elif current_orient is "E":
+        new_orient is "N"
+    elif current_orient is "S":
+        new_orient is "E"
+    elif current_orient is "W":
+        new_orient = "S"
+
+    return new_orient
+
+
+def right_turn(current_orient):
+    if current_orient is "N":
+        new_orient = "E"
+    elif current_orient is "E":
+        new_orient is "S"
+    elif current_orient is "S":
+        new_orient is "W"
+    elif current_orient is "W":
+        new_orient = "N"
+
+    return new_orient
+
+
+def move_forward(current_orient, bot_position_x, bot_position_y):
+    if current_orient is "N":
+        new_bot_position_y = bot_position_y + 1
+    elif current_orient is "S":
+        new_bot_position_y = bot_position_y - 1
+    elif current_orient is "E":
+        new_bot_position_x = bot_position_x + 1
+    elif current_orient is "W":
+        new_bot_position_x = bot_position_x - 1
+
+    return new_bot_position_x, new_bot_position_y
+
+
+def move_bot(bot_instructions, oriuentation, bot_position_x, bot_position_y):
     for move in bot_instructions:
         if move == "R":
             print("turning right")
