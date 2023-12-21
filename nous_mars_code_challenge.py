@@ -1,27 +1,27 @@
 def right_turn(current_orient):
     if current_orient == "N":
-        current_orient = "E"
+        new_orient = "E"
     elif current_orient == "E":
-        current_orient == "S"
+        new_orient = "S"
     elif current_orient == "S":
-        current_orient == "W"
+        new_orient = "W"
     elif current_orient == "W":
-        current_orient = "N"
+        new_orient = "N"
 
-    return current_orient
+    return new_orient
 
 
 def left_turn(current_orient):
     if current_orient == "N":
-        current_orient = "W"
+        new_orient = "W"
     elif current_orient == "E":
-        current_orient == "N"
+        new_orient = "N"
     elif current_orient == "S":
-        current_orient == "E"
+        new_orient = "E"
     elif current_orient == "W":
-        current_orient = "S"
+        new_orient = "S"
 
-    return current_orient
+    return new_orient
 
 
 def where_is_move_forward(current_orient, bot_position_x, bot_position_y):
@@ -64,29 +64,53 @@ def move_forward(current_orient, bot_position_x, bot_position_y, max_x, max_y):
 
 
 def move_bot(
-    bot_instructions, current_orient, bot_position_x, bot_position_y, max_x, max_y
+    bot_instructions,
+    current_orient,
+    bot_position_x,
+    bot_position_y,
+    max_x,
+    max_y,
+    death_coordinates,
 ):
     for move in bot_instructions:
+        print(
+            f"current positions: x = {bot_position_x} and  y = {bot_position_y} and orientation = {current_orient}"
+        )
         if move == "R":
-            print("move right")
-            right_turn(current_orient)
+            print("turn right")
+            current_orient = right_turn(current_orient)
         elif move == "L":
-            print("move left")
-            left_turn(current_orient)
+            print("turn left")
+            current_orient = left_turn(current_orient)
         elif move == "F":
             print("move forward")
             bot_position_x, bot_position_y, bot_lost = move_forward(
-                current_orient, bot_position_x, bot_position_y, max_x, max_y
+                current_orient,
+                bot_position_x,
+                bot_position_y,
+                max_x,
+                max_y,
             )
             if bot_lost == True:
-                print("bot lost")
+                print(bot_position_x, bot_position_y)
+                if (bot_position_x, bot_position_y) in death_coordinates:
+                    continue
 
-                break
+                elif (bot_position_x, bot_position_y) not in death_coordinates:
+                    print("bot lost")
+
+                    new_death_coordinates = (bot_position_x, bot_position_y)
+
+                    death_coordinates.append(new_death_coordinates)
+
+                    print(f"new death coordinates are: {death_coordinates}")
+
+                    break
 
     return bot_position_x, bot_position_y, current_orient, bot_lost
 
 
-def bot_info_input(bot_number, max_x, max_y):
+def bot_info_input(bot_number, max_x, max_y, death_coordinates):
     if bot_number == 1:
         first_or_next = "first"
     elif bot_number >= 2:
@@ -126,6 +150,7 @@ def bot_info_input(bot_number, max_x, max_y):
         bot_position_y,
         max_x,
         max_y,
+        death_coordinates,
     )
 
     if bot_lost:
@@ -137,6 +162,7 @@ def bot_info_input(bot_number, max_x, max_y):
 
 
 def main():
+    death_coordinates = []
     print("Enter the size of your planet")
     max_x, max_y = map(int, input().split())
 
@@ -144,14 +170,14 @@ def main():
 
     bot_number = 1
 
-    bot_info_input(bot_number, max_x, max_y)
+    bot_info_input(bot_number, max_x, max_y, death_coordinates)
 
     while True:
         print("Do you have another bot? Y/N")
         more_bots = input().upper()
         if more_bots == "Y":
             bot_number += 1
-            bot_info_input(bot_number, max_x, max_y)
+            bot_info_input(bot_number, max_x, max_y, death_coordinates)
         elif more_bots == "N":
             print("Thanks for playing")
             break
